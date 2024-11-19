@@ -5,9 +5,11 @@ import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -81,7 +83,9 @@ public class JWTUtils {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        return getUsernameFromToken(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+        if (isTokenExpired(token))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token Expired");
+        return getUsernameFromToken(token).equals(userDetails.getUsername());
     }
 
     private <T> T getClaim(String token, Function<Claims, T> claimFunction) {
@@ -98,6 +102,8 @@ public class JWTUtils {
                         .getPayload();
         }catch(ExpiredJwtException e){
             return e.getClaims();
+        }catch(Exception e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT Token Invalid");
         }
     }
 }
