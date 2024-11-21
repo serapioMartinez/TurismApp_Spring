@@ -1,8 +1,13 @@
 package com.radical3d.turismapp.TurismApp.model;
 
+import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.radical3d.turismapp.TurismApp.model.security.UserAdmin;
+import com.radical3d.turismapp.TurismApp.utils.AppUtils;
+import com.radical3d.turismapp.TurismApp.utils.LoggerHelper;
+import com.radical3d.turismapp.TurismApp.utils.Validations;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -70,15 +75,41 @@ public class City {
     @Column()
     private String photo;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id", name = "admin_id", nullable = false, unique = true)
     private UserAdmin userAdmin;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinTable(
         name = "city_tourism_types",
         joinColumns = @JoinColumn(name = "city_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "type_id", referencedColumnName = "id"))
     private Set<TourismType> tourismTypes;
 
+    public static final Map<String, String> REGIONES = AppUtils.retrievePropertiesFromFile("regions");    
+   
+
+    public static boolean isCiudadValidForPersistance(City ciudad){
+        if ( ciudad.getUserAdmin().getId() == 0
+            || !Validations.validateText(ciudad.name)
+            || !REGIONES.containsKey(ciudad.region)
+            || !ciudad.validateTiposTurismo()
+            || !Validations.validateText(ciudad.municipality)
+            || !Validations.validateText(ciudad.description)) {
+            LoggerHelper.error("Validations not passed by the city");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validateTiposTurismo(){
+        Map<String, String> tiposT = AppUtils.retrievePropertiesFromFile("tourismType");
+
+        for(TourismType tt:this.tourismTypes){
+            if (!tiposT.containsKey(tt.getId())) return false;
+        }
+
+        return true;
+    }
 }

@@ -12,6 +12,7 @@ import com.radical3d.turismapp.TurismApp.model.City;
 public interface ICityRepository extends JpaRepository<City, Integer>{
     
     Optional<City> findById(int id);
+    Optional<City> findByUserAdmin_User_Username(String username);
 
     @Query(value = "SELECT c.userAdmin.id from City c where c.id = ?1")
     Optional<Integer> findCityAdminId(int cityID);

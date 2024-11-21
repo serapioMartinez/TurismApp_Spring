@@ -70,4 +70,15 @@ public class ICityRepositoryTest extends SharedUserInitialization{
             () -> assertEquals(c_city.getId(), cityID)
         );
     }
+
+    @Test
+    void testFindByUserAdmin_User_Username(){
+        City city = cityRepository.findByUserAdmin_User_Username(USERNAME).get();
+
+        assertAll(
+            () -> assertNotNull(city),
+            () -> assertEquals(c_city.getId(), city.getId()),
+            () -> assertEquals(c_city.getUserAdmin().getId(), city.getUserAdmin().getId())
+        );
+    }
 }

@@ -1,0 +1,36 @@
+{
+  "regions": {
+    "CN":"CAÑADA",
+    "CT":"COSTA",
+    "IT":"ITSMO",
+    "MX":"MIXTECA",
+    "PP":"PAPALOAPAN",
+    "SS":"SIERRA SUR",
+    "SN":"SIERRA NORTE",
+    "VC":"VALLES CENTRALES"
+},
+  "bussinesType": {
+    "NT": "NO HAY TIPO",
+    "RS": "RESTAURANTE",
+    "HT": "HOTEL",
+    "TR": "TRANSPORTE",
+    "MR": "MERCADO",
+    "BN": "BANCO",
+    "GB": "GOBIERNO",
+    "SP": "SUPERMERCADO",
+    "AB": "ABARROTES"
+  },
+  "tourismType" : {
+    "NT":"NO HAY TIPO",
+    "AV":"AVENTURA",
+    "DP":"DEPORTE",
+    "NG":"NEGOCIOS",
+    "CL":"CULTURAL",
+    "GS":"GASTRONOMICO",
+    "AQ":"ARQUEOLICO",
+    "SL":"SALUD",
+    "RL":"RURAL",
+    "EC":"ECOLOGICO",
+    "ES":"ESPIRITUAL"
+  }
+}

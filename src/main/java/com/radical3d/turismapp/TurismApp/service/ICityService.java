@@ -6,5 +6,5 @@ public interface ICityService {
     public City createCity(City city);
     public City updateCity(City city);
     public City getCity();
-    public Integer deleteCity(int id);
+    public City deleteCity();
 }

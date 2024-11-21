@@ -131,17 +131,13 @@ public class AuthService {
         }
 
         public AuthResponse getLoggeduserData() {
-                UserDetails userDetails = (UserDetails) getContextAuthentication().getPrincipal();
+                UserDetails userDetails = (UserDetails) AppUtils.getContextAuthentication().getPrincipal();
                 
                 return AuthResponse.builder()
                                 .username(userDetails.getUsername())
                                 .userType(userAdminRepository.getuserTypeByUsername(userDetails.getUsername()).get())
                                 .message("User logged in")
                                 .build();
-        }
-
-        private Authentication getContextAuthentication(){
-                return SecurityContextHolder.getContext().getAuthentication();
         }
 
         public AuthResponse logout(HttpServletResponse response) {
