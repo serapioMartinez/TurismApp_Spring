@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.radical3d.turismapp.TurismApp.service.security.AuthService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.registerUser(register));
     }
     
+    
+    @PostMapping("/refreshToken")
+    public ResponseEntity<AuthResponse> refresh(
+                        HttpServletRequest request, 
+                        HttpServletResponse response) {
+        return ResponseEntity.ok(authService.refreshToken(request, response));
+
+    }
 
 }

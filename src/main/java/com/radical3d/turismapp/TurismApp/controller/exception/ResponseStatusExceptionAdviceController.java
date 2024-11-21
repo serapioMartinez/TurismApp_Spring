@@ -9,6 +9,7 @@ import com.radical3d.turismapp.TurismApp.utils.LoggerHelper;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+@RestControllerAdvice()
 public class ResponseStatusExceptionAdviceController {
     @ExceptionHandler(value = {ResponseStatusException.class})
     public ResponseEntity<ErrorResponse> responseExceptionHandler(ResponseStatusException e, HttpServletRequest request){

@@ -1,16 +1,11 @@
 package com.radical3d.turismapp.TurismApp.controller.exception;
 
-import java.util.Enumeration;
-
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import com.radical3d.turismapp.TurismApp.utils.LoggerHelper;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -34,11 +29,12 @@ public class AppErrorController implements ErrorController {
                             .path(error_path)
                             .build());
         }
+        String errorMessage = e!=null?e.getMessage():request.getAttribute("jakarta.servlet.error.message").toString();
         return ResponseEntity
                 .status(status)
                 .body(ErrorResponse.builder()
                         .error(HttpStatusCode.valueOf(status))
-                        .message(e.getMessage())
+                        .message(errorMessage)
                         .status(status)
                         .path(error_path)
                         .build());

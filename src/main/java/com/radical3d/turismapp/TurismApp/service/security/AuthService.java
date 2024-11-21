@@ -25,7 +25,9 @@ import com.radical3d.turismapp.TurismApp.model.security.UserAdmin;
 import com.radical3d.turismapp.TurismApp.repository.security.IUserAdminRepository;
 import com.radical3d.turismapp.TurismApp.repository.security.IUserRepository;
 import com.radical3d.turismapp.TurismApp.security.jwt.JWTUtils;
+import com.radical3d.turismapp.TurismApp.utils.AppUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
@@ -105,7 +107,7 @@ public class AuthService {
         }
 
         private void setJwtCookies(HttpServletResponse response, String token, String refreshToken, boolean logout) {
-                if (token == null || refreshToken == null)
+                if (!logout && (token == null || refreshToken == null))
                         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Token generation failed");
 
                 ResponseCookie jwtCookie = ResponseCookie.from(JWT_COOKIE_NAME, token)
@@ -134,12 +136,39 @@ public class AuthService {
                 return AuthResponse.builder()
                                 .username(userDetails.getUsername())
                                 .userType(userAdminRepository.getuserTypeByUsername(userDetails.getUsername()).get())
-                                .message("User logged")
+                                .message("User logged in")
                                 .build();
         }
 
         private Authentication getContextAuthentication(){
                 return SecurityContextHolder.getContext().getAuthentication();
+        }
+
+        public AuthResponse logout(HttpServletResponse response) {
+                setJwtCookies(response, "", "", true);
+                return AuthResponse.builder()
+                                .message("User logged out")
+                                .build();
+        }
+
+        public AuthResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+                String refreshToken = AppUtils.getRequestCookieValue(request, JWT_REFRESH_COOKIE_NAME);
+                String username = jwtUtils.getUsernameFromToken(refreshToken);
+                UserDetails userDetails = userRepository.findByUsername(username)
+                                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh Token is invalid"));
+                if(!jwtUtils.isTokenValid(refreshToken, userDetails))
+                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh Token is invalid");
+                
+                String token = jwtUtils.generateToken(username);
+                        refreshToken = jwtUtils.generateRefreshToken(username);
+
+                setJwtCookies(response, token, refreshToken, false);
+
+                return AuthResponse.builder()
+                                        .message("Tokens generated succesuffly")
+                                        .username(username)
+                                        .userType(userAdminRepository.getuserTypeByUsername(username).get())
+                                        .build();
         }
 
 }

@@ -1,8 +1,6 @@
 package com.radical3d.turismapp.TurismApp.security;
 
 import java.io.IOException;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.radical3d.turismapp.TurismApp.model.security.User;
 import com.radical3d.turismapp.TurismApp.repository.security.IUserRepository;
 import com.radical3d.turismapp.TurismApp.security.jwt.JWTUtils;
 import com.radical3d.turismapp.TurismApp.utils.AppUtils;
@@ -20,7 +17,6 @@ import com.radical3d.turismapp.TurismApp.utils.LoggerHelper;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
