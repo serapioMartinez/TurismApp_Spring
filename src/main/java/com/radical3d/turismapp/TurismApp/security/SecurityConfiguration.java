@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers(
                             "/error",
                             "/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/city/**").hasRole(Role.ROLE_CITY.name())
+                        .requestMatchers("/api/v1/city/**").hasRole(Role.ROLE_CITY.name().substring(5))
                         .requestMatchers("**").authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

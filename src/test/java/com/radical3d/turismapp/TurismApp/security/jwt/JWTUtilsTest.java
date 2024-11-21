@@ -3,6 +3,7 @@ package com.radical3d.turismapp.TurismApp.security.jwt;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.radical3d.turismapp.TurismApp.security.jwt.JWTUtils;
 import com.radical3d.turismapp.TurismApp.security.jwt.JwtConfig;
@@ -89,15 +91,13 @@ public class JWTUtilsTest {
     }
 
     @Test
-    void testIsTokenValid_Return_false() throws Exception{
+    void testIsTokenValid_Throw_ResponseStatusException() throws Exception{
         
-        when(userDetails.getUsername()).thenReturn(USERNAME);
         when(jwtConfig.getTokenLifetime()).thenReturn(0L);
 
         final String token = jwtUtils.generateToken(USERNAME);
         Thread.sleep(10);
-        boolean isValid = jwtUtils.isTokenValid(token, userDetails);
-
-        assertFalse(isValid);
+        
+        assertThrows(ResponseStatusException.class, () -> jwtUtils.isTokenValid(token, userDetails));
     }
 }

@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class JwtAuthorizationFilter extends OncePerRequestFilter{
+public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Value("${application.jwt-cookie-name}")
     private String JWT_COOKIE_NAME;
@@ -40,15 +40,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter{
     private IUserRepository userRepository;
 
     private final String[] NO_FILTER_PATHS = {
-        "/api/v1/auth/.*"
+            "/api/v1/auth/.*"
     };
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        LoggerHelper.info("Validating JWT should filter path: "+path);
+        LoggerHelper.info("Validating JWT should filter path: " + path);
         for (String no_filter : NO_FILTER_PATHS) {
-            if (path.matches(no_filter)) return true;
+            if (path.matches(no_filter))
+                return true;
         }
         LoggerHelper.info("Filtering");
         return false;
@@ -56,26 +57,26 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter{
 
     @Override
     protected void doFilterInternal(
-                        HttpServletRequest request, 
-                        HttpServletResponse response, 
-                        FilterChain filterChain) throws ServletException, IOException {
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         String token = AppUtils.getRequestCookieValue(request, JWT_COOKIE_NAME);
 
-        if(token == null){
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
+            String username = jwtUtils.getUsernameFromToken(token);
 
-        String username = jwtUtils.getUsernameFromToken(token);
-
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = userRepository.findByUsername(username)
-                                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT Token Invalid"));
-            if (jwtUtils.isTokenValid(token, userDetails)) {
-                SecurityContextHolder.getContext()
-                    .setAuthentication(jwtUtils.getAuthentication(userDetails));
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT Token Invalid"));
+                if (jwtUtils.isTokenValid(token, userDetails)) {
+                    SecurityContextHolder.getContext()
+                            .setAuthentication(jwtUtils.getAuthentication(userDetails));
+                }
             }
-        }
+        
         filterChain.doFilter(request, response);
     }
 

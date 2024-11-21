@@ -20,7 +20,7 @@ import io.jsonwebtoken.security.Keys;
 public class JWTUtils {
 
     @Autowired
-    private JwtConfig jwtConfig;
+    public JwtConfig jwtConfig;
 
     private String getSecretKey(){
         return jwtConfig.getSecreyKey();
