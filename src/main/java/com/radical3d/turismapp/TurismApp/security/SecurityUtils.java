@@ -1,5 +1,7 @@
 package com.radical3d.turismapp.TurismApp.security;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +15,7 @@ public class SecurityUtils {
     @Autowired
     ICityRepository cityRepository;
     
-    public int getcityIDForAuthenticatedUser() {
+    public int getcityIDForAuthenticatedUser() throws SQLException{
         return cityRepository
                     .findCityIDByUsername(
                         getUserDetailsFromSecurityContext().getUsername())

@@ -1,9 +1,5 @@
 package com.radical3d.turismapp.TurismApp.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.radical3d.turismapp.TurismApp.repository.ITourismTypeRepository;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

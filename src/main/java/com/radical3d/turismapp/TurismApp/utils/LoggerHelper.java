@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 
@@ -16,7 +15,7 @@ public class LoggerHelper {
     public final static PrintWriter printWriter = new PrintWriter(System.out,true);
 
     private static CustomLogger configurelogger(){
-        Layout layout = PatternLayout.createDefaultLayout();
+        PatternLayout layout = PatternLayout.createDefaultLayout();
         return new CustomLogger("CustomLogger", null, layout, printWriter);
     }
 

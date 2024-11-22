@@ -9,9 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @MappedSuperclass
 public abstract class CityItemSuperClass {
     @Id()
@@ -31,4 +31,7 @@ public abstract class CityItemSuperClass {
     
     @Column(columnDefinition = "VARCHAR(50)")
     protected String photo;
+
+    abstract public void updateItemFields(CityItemSuperClass target, CityItemSuperClass origin);
+    abstract public void validateItemForPersistance();
 }

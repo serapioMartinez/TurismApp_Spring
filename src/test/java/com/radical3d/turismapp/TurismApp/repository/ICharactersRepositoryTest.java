@@ -64,7 +64,7 @@ public class ICharactersRepositoryTest extends SharedCityInitialization{
 
     @Test
     void testFindAllByCity_Id() {
-        List characters = charactersRepository.findAllByCity_Id(c_city.getId(), PageRequest.ofSize(COUNT+10)); //+10 correspond to a offset
+        List<Characters> characters = charactersRepository.findAllByCity_Id(c_city.getId(), PageRequest.ofSize(COUNT+10)); //+10 correspond to a offset
 
         assertAll(
             () -> assertFalse(characters.isEmpty()),

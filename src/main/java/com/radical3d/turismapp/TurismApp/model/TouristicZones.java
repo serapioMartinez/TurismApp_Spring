@@ -20,5 +20,21 @@ public class TouristicZones extends CityItemSuperClass{
         this.zoneType = zoneType;
     }
 
+    @Override
+    public void updateItemFields(CityItemSuperClass target, CityItemSuperClass origin) {
+        TouristicZones zoneTg = (TouristicZones) target;
+        TouristicZones zoneOr= (TouristicZones) origin;
+
+        zoneTg.setName(zoneOr.getName());
+        zoneTg.setPhoto(zoneOr.getPhoto());
+        zoneTg.setDescription(zoneOr.getDescription());
+        zoneTg.setZoneType(zoneOr.getZoneType());
+    }
+
+    @Override
+    public void validateItemForPersistance() {
+        // Implement validations
+    }
+
     
 }

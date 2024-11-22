@@ -16,7 +16,8 @@ public class Characters extends CityItemSuperClass{
     private short birthYear;
 
     @Builder
-    public Characters(City city, String name, String description, short deathYear, short birthYear, String photo) {
+    public Characters(int id, City city, String name, String description, short deathYear, short birthYear, String photo) {
+        this.id = id;
         this.city = city;
         this.name = name;
         this.description = description;
@@ -39,6 +40,23 @@ public class Characters extends CityItemSuperClass{
                     .photo(this.photo)
                     .build();
         }
+    }
+
+    @Override
+    public void updateItemFields(CityItemSuperClass target, CityItemSuperClass origin) {
+        Characters charTg = (Characters) target;
+        Characters charOr = (Characters) origin;
+
+        charTg.setName(charOr.getName());
+        charTg.setPhoto(charOr.getPhoto());
+        charTg.setBirthYear(charOr.getBirthYear());
+        charTg.setDeathYear(charOr.getDeathYear());
+        charTg.setDescription(charOr.getDescription());
+    }
+
+    @Override
+    public void validateItemForPersistance() {
+        //Implement validations
     }
 
     

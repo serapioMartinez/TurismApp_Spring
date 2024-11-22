@@ -8,11 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.radical3d.turismapp.TurismApp.model.City;
-import com.radical3d.turismapp.TurismApp.model.security.Role;
-import com.radical3d.turismapp.TurismApp.model.security.User;
-import com.radical3d.turismapp.TurismApp.model.security.UserAdmin;
-import com.radical3d.turismapp.TurismApp.repository.security.IUserAdminRepository;
-import com.radical3d.turismapp.TurismApp.repository.security.IUserRepository;
 import com.radical3d.turismapp.TurismApp.utils.LoggerHelper;
 
 @DataJpaTest

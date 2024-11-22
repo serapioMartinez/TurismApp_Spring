@@ -8,4 +8,18 @@ import lombok.Data;
 @Builder
 @Entity(name = "dishes")
 public class Dishes extends CityItemSuperClass{
+    @Override
+    public void updateItemFields(CityItemSuperClass target, CityItemSuperClass origin) {
+        Dishes dishTg = (Dishes) target;
+        Dishes dishOr = (Dishes) origin;
+
+        dishTg.setName(dishOr.getName());
+        dishTg.setDescription(dishOr.getDescription());
+        dishTg.setPhoto(dishOr.getPhoto());
+    }
+
+    @Override
+    public void validateItemForPersistance() {
+        // Implement validations
+    }
 }
