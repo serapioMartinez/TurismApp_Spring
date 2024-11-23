@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -94,7 +95,7 @@ public class CharacterServiceTest {
         when(cityRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(city));
         when(charactersRepository.findAllByCity_Id(Mockito.anyInt(), Mockito.any())).thenReturn(List.of(character));
 
-        List<Characters> characters = characterService.getCityitems(0, "id", false);
+        List<Characters> characters = characterService.getCityitems(new Response(),0, "id", false);
 
         assertAll(
             () -> assertNotNull(characters),

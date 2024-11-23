@@ -1,5 +1,7 @@
 package com.radical3d.turismapp.TurismApp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
@@ -19,8 +21,9 @@ public abstract class CityItemSuperClass {
     @Column(nullable = false, unique = true)
     protected int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city", referencedColumnName = "id", unique = false)
+    @JsonIgnore
     protected City city; 
 
     @Column(columnDefinition = "VARCHAR(60)")

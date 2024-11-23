@@ -54,4 +54,15 @@ public class AppUtils {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There is an error with the APP DATA. Please contact the administrator to solve the problem");
         }
     }
+
+    public static <T> String validateSortingFieldExist(Class<T> a, String field_name, String default_field_name){
+        try{
+            a.getDeclaredField(field_name);
+            return field_name;
+        }catch(NoSuchFieldException e){
+           LoggerHelper.error("Field" + field_name + "not Found for class " + a.getName());
+           return default_field_name;
+        }
+        
+    }
 }
