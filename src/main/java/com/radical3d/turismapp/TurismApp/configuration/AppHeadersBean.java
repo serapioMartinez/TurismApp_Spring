@@ -17,5 +17,10 @@ public class AppHeadersBean {
     @Value("${application.header-pag-limit-name}")
     private String HEADER_PAGINATION_LIMIT_NAME;
 
+    @Value("${application.jwt-cookie-name}")
+    private String JWT_COOKIE_NAME;
+
+    @Value("${application.rtoken-cookie-name}")
+    private String JWT_REFRESH_COOKIE_NAME;
 
 }

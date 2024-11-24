@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.radical3d.turismapp.TurismApp.configuration.AppHeadersBean;
 import com.radical3d.turismapp.TurismApp.repository.security.IUserRepository;
 import com.radical3d.turismapp.TurismApp.security.jwt.JWTUtils;
 import com.radical3d.turismapp.TurismApp.utils.AppUtils;
@@ -23,11 +24,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    @Value("${application.jwt-cookie-name}")
-    private String JWT_COOKIE_NAME;
-
-    @Value("${application.rtoken-cookie-name}")
-    private String RTOKEN_COOKIE_NAME;
+    @Autowired
+    private AppHeadersBean appHeaders;
 
     @Autowired
     private JWTUtils jwtUtils;
@@ -56,7 +54,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        String token = AppUtils.getRequestCookieValue(request, JWT_COOKIE_NAME);
+        String token = AppUtils.getRequestCookieValue(request, appHeaders.getJWT_COOKIE_NAME());
 
         if (token == null) {
             filterChain.doFilter(request, response);

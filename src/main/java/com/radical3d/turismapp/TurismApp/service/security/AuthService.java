@@ -1,7 +1,6 @@
 package com.radical3d.turismapp.TurismApp.service.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.radical3d.turismapp.TurismApp.configuration.AppHeadersBean;
 import com.radical3d.turismapp.TurismApp.controller.security.AuthResponse;
 import com.radical3d.turismapp.TurismApp.controller.security.LoginRequest;
 import com.radical3d.turismapp.TurismApp.controller.security.RegisterRequest;
@@ -45,11 +45,8 @@ public class AuthService {
         @Autowired
         private JWTUtils jwtUtils;
 
-        @Value("${application.jwt-cookie-name}")
-        private String JWT_COOKIE_NAME;
-
-        @Value("${application.rtoken-cookie-name}")
-        private String JWT_REFRESH_COOKIE_NAME;
+        @Autowired
+        private AppHeadersBean appHeaders;
 
         public AuthResponse registerUser(RegisterRequest registerRequest) {
                 User user = userRepository.findByUsername(registerRequest.getUsername())
@@ -108,7 +105,7 @@ public class AuthService {
                 if (!logout && (token == null || refreshToken == null))
                         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Token generation failed");
 
-                ResponseCookie jwtCookie = ResponseCookie.from(JWT_COOKIE_NAME, token)
+                ResponseCookie jwtCookie = ResponseCookie.from(appHeaders.getJWT_COOKIE_NAME(), token)
                                 .httpOnly(true)
                                 .path("/")
                                 .secure(true)
@@ -116,7 +113,7 @@ public class AuthService {
                                 .maxAge(logout ? 0 : jwtUtils.jwtConfig.LIFETIME_TOKEN_SECONDS.longValue())
                                 .build();
 
-                ResponseCookie refreshJwtCookie = ResponseCookie.from(JWT_REFRESH_COOKIE_NAME, refreshToken)
+                ResponseCookie refreshJwtCookie = ResponseCookie.from(appHeaders.getJWT_REFRESH_COOKIE_NAME(), refreshToken)
                                 .httpOnly(true)
                                 .path("/")
                                 .secure(true)
@@ -146,7 +143,7 @@ public class AuthService {
         }
 
         public AuthResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
-                String refreshToken = AppUtils.getRequestCookieValue(request, JWT_REFRESH_COOKIE_NAME);
+                String refreshToken = AppUtils.getRequestCookieValue(request, appHeaders.getJWT_REFRESH_COOKIE_NAME());
                 String username = jwtUtils.getUsernameFromToken(refreshToken);
                 UserDetails userDetails = userRepository.findByUsername(username)
                                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh Token is invalid"));
