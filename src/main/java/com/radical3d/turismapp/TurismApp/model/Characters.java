@@ -19,13 +19,9 @@ public class Characters extends CityItemSuperClass{
 
     @Builder
     public Characters(int id, City city, String name, String description, short deathYear, short birthYear, String photo) {
-        this.id = id;
-        this.city = city;
-        this.name = name;
-        this.description = description;
+        super(id, city, name, description, photo);
         this.deathYear = deathYear;
         this.birthYear = birthYear;
-        this.photo = photo;
     }
 
     @Override

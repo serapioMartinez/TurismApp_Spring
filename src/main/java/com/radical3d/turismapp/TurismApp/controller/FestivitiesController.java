@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,9 +21,9 @@ import com.radical3d.turismapp.TurismApp.service.FestivityService;
 import com.radical3d.turismapp.TurismApp.utils.AppUtils;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.websocket.server.PathParam;
 
-@RestController("/api/v1/city/festivities")
+@RestController()
+@RequestMapping("/api/v1/city/festivities")
 public class FestivitiesController {
     
     @Autowired
@@ -38,7 +40,7 @@ public class FestivitiesController {
     }    
 
     @GetMapping("/{id}")
-    public ResponseEntity<Festivities> getCharacter(@PathParam(value = "id") Integer id) {
+    public ResponseEntity<Festivities> getCharacter(@PathVariable Integer id) {
         return ResponseEntity.ok().body(festivityService.getItem(id));
     }
 

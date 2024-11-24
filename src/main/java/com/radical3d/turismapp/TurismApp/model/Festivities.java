@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -16,6 +15,14 @@ import lombok.NoArgsConstructor;
 public class Festivities extends CityItemSuperClass{
     private short day;
     private short month;
+
+    @Builder
+    public Festivities(int id, City city, String name, String description, String photo, short day, short month){
+        super(id, city, name, description, photo);
+        this.day = day;
+        this.month = month;
+    }
+
     @Override
     public void updateItemFields(CityItemSuperClass target, CityItemSuperClass origin) {
         Festivities fesTg = (Festivities) target;

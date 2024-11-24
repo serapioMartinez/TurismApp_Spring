@@ -16,11 +16,8 @@ public class TouristicZones extends CityItemSuperClass{
     private String zoneType;
 
     @Builder
-    public TouristicZones(City city, String name, String description,String zoneType, String photo) {
-        this.city = city;
-        this.name = name;
-        this.description = description;
-        this.photo = photo;
+    public TouristicZones(int id, City city, String name, String description, String photo, String zoneType) {
+        super(id, city, name, description, photo);
         this.zoneType = zoneType;
     }
 
