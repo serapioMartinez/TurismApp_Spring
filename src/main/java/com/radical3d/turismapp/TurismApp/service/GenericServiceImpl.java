@@ -26,7 +26,7 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
 
     private IGenericItemRepository<T, Integer> itemRepository;
 
-    private final int PAGE_SIZE = 10;
+    protected final int PAGE_SIZE = 10;
 
 
     public GenericServiceImpl(
@@ -80,7 +80,7 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
         return itemRepository.save(p_item);
     }
 
-    private void validateItemIsOwnedByUser(T item) {
+    protected void validateItemIsOwnedByUser(T item) {
         City city = getUserCity();
         if (item.getCity().getId() != city.getId())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
@@ -101,7 +101,7 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
         return item;
     }
 
-    private City getUserCity() {
+    protected City getUserCity() {
         try {
             int cityID = securityUtils.getcityIDForAuthenticatedUser();
             return cityRepository.findById(cityID).get();
@@ -110,7 +110,7 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
         }
     }
 
-    private void setPaginationHeaders(HttpServletResponse  response, City city, int page) {
+    protected void setPaginationHeaders(HttpServletResponse  response, City city, int page) {
         int count = itemRepository.countByCity_Id(city.getId());
 
         response.setHeader(get_HEADER_PAGINATION_LIMIT_NAME(), String.valueOf(PAGE_SIZE));
