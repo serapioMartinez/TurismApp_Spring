@@ -25,11 +25,11 @@ import lombok.NoArgsConstructor;
 public class Direction {
 
     @Id()
-    @MapsId()
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @MapsId()
     @JsonIgnore
     private Establishment establishment;
 

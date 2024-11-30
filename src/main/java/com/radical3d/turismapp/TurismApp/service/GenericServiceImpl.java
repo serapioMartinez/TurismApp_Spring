@@ -15,6 +15,7 @@ import com.radical3d.turismapp.TurismApp.model.CityItemSuperClass;
 import com.radical3d.turismapp.TurismApp.repository.ICityRepository;
 import com.radical3d.turismapp.TurismApp.repository.IGenericItemRepository;
 import com.radical3d.turismapp.TurismApp.security.SecurityUtils;
+import com.radical3d.turismapp.TurismApp.utils.LoggerHelper;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -27,7 +28,6 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
     private IGenericItemRepository<T, Integer> itemRepository;
 
     protected final int PAGE_SIZE = 10;
-
 
     public GenericServiceImpl(
             IGenericItemRepository<T, Integer> itemRepository,
@@ -49,13 +49,16 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
     @Override
     public List<T> getCityitems(HttpServletResponse response, int page, String orderBy, boolean ascending) {
         City city = getUserCity();
-
         List<T> items = itemRepository.findAllByCity_Id(
                 city.getId(),
                 PageRequest.of(
                         page,
                         PAGE_SIZE,
                         Sort.by(ascending ? Direction.ASC : Direction.DESC, orderBy)));
+
+        if(!items.isEmpty())
+            LoggerHelper.info(
+                "Getting elements for " + items.get(0).getClass().getName() +": page = " + page + "; orderBy = " + orderBy + ";ascending: " + ascending);
         setPaginationHeaders(response, city, page);
         return items;
     }
@@ -92,8 +95,8 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
     public T deleteItem(Integer itemID) {
         T item = itemRepository.findById(itemID)
                 .orElseThrow(() -> new ResponseStatusException(
-                                            HttpStatus.NOT_FOUND, 
-                                            "Item with ID: " + itemID + " not found"));
+                        HttpStatus.NOT_FOUND,
+                        "Item with ID: " + itemID + " not found"));
         validateItemIsOwnedByUser(item);
 
         itemRepository.delete(item);
@@ -110,16 +113,18 @@ public abstract class GenericServiceImpl<T extends CityItemSuperClass> implement
         }
     }
 
-    protected void setPaginationHeaders(HttpServletResponse  response, City city, int page) {
+    protected void setPaginationHeaders(HttpServletResponse response, City city, int page) {
         int count = itemRepository.countByCity_Id(city.getId());
 
         response.setHeader(get_HEADER_PAGINATION_LIMIT_NAME(), String.valueOf(PAGE_SIZE));
         response.setHeader(get_HEADER_PAGINATION_COUNT_NAME(), String.valueOf(count));
-        response.setHeader(get_HEADER_PAGINATION_PAGE_NAME(), String.valueOf(page+1));
+        response.setHeader(get_HEADER_PAGINATION_PAGE_NAME(), String.valueOf(page + 1));
     }
 
     public abstract String get_HEADER_PAGINATION_LIMIT_NAME();
+
     public abstract String get_HEADER_PAGINATION_COUNT_NAME();
+
     public abstract String get_HEADER_PAGINATION_PAGE_NAME();
 
 }

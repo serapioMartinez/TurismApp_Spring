@@ -61,8 +61,10 @@ public class Establishment extends CityItemSuperClass {
 
     @Override
     public void validateItemForPersistance() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validateItemForPersistance'");
+    }
+
+    public void setPhoneNumber(String phonenumber){
+        this.phoneNumber = phonenumber.replace("-", "");
     }
 
 }

@@ -45,6 +45,14 @@ public class DirectionServiceImp implements IDirectionService {
     }
 
     @Override
+    public Direction createEstablishmentDirection(Direction direction, Establishment establishment) {
+        direction.setCity(establishment.getCity());
+        direction.setEstablishment(establishment);
+
+        return directionRepository.save(direction);
+    }
+
+    @Override
     public Direction updateEstablishmentDirection(Direction direction, int establishmentID) {
         City city = getUserCity();
         Establishment establishment = establishmentRepository
@@ -55,6 +63,19 @@ public class DirectionServiceImp implements IDirectionService {
         Direction p_direction = establishment.getDirection();
         if (p_direction == null) {
             direction.setCity(city);
+            direction.setEstablishment(establishment);
+
+            return directionRepository.save(direction);
+        }
+        p_direction.updateItemFields(p_direction, direction);
+        return directionRepository.save(p_direction);
+    }
+
+    @Override
+    public Direction updateEstablishmentDirection(Direction direction, Establishment establishment) {
+        Direction p_direction = establishment.getDirection();
+        if (p_direction == null) {
+            direction.setCity(establishment.getCity());
             direction.setEstablishment(establishment);
 
             return directionRepository.save(direction);

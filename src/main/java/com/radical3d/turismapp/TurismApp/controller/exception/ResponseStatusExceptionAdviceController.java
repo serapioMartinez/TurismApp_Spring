@@ -22,6 +22,6 @@ public class ResponseStatusExceptionAdviceController {
                                             .path(request.getRequestURI())
                                             .build();
         
-        return ResponseEntity.ofNullable(errorResponse);
+        return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
     }
 }

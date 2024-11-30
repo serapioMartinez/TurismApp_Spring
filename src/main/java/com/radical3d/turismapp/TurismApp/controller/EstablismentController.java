@@ -24,7 +24,7 @@ import com.radical3d.turismapp.TurismApp.utils.AppUtils;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/api/v1/city/establisments")
+@RequestMapping("/api/v1/city/establishments")
 public class EstablismentController {
 
     @Autowired
@@ -63,17 +63,17 @@ public class EstablismentController {
         if(page<1) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified page: "+page+" invalid");
 
         orderBy = AppUtils.validateSortingFieldExist(Establishment.class, orderBy, "id");
-        return ResponseEntity.ok().body(establishmentService.getCityitems(response, page, orderBy, ascending));
+        return ResponseEntity.ok().body(establishmentService.getCityitems(response, page-1, orderBy, ascending));
     }
 
-    @PostMapping("/direction")
+    @PostMapping(path = "/direction")
     public ResponseEntity<Direction> createEstablishmentDirection(
         @RequestBody Direction direction,
         @RequestParam(required = true) int establishment){
         return ResponseEntity.ok().body(directionService.createEstablishmentDirection(direction, establishment));
     }
 
-    @PutMapping("/direction")
+    @PutMapping(path = "/direction")
     public ResponseEntity<Direction> updateEstablishmentDirection(
         @RequestBody Direction direction,
         @RequestParam(required = true) int establishment){

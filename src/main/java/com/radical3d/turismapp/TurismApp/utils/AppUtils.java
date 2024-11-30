@@ -3,6 +3,7 @@ package com.radical3d.turismapp.TurismApp.utils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.json.JsonParser;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.radical3d.turismapp.TurismApp.model.CityItemSuperClass;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,14 +58,18 @@ public class AppUtils {
         }
     }
 
-    public static <T> String validateSortingFieldExist(Class<T> a, String field_name, String default_field_name){
+    public static <T> String validateSortingFieldExist(T a, String field_name, String default_field_name){
         try{
-            a.getDeclaredField(field_name);
+            if(a instanceof CityItemSuperClass) 
+                try{ a.getClass().getDeclaredField(field_name); }
+                catch(NoSuchFieldException ex){ CityItemSuperClass.class.getDeclaredField(field_name);}
+            else a.getClass().getDeclaredField(field_name);
             return field_name;
         }catch(NoSuchFieldException e){
-           LoggerHelper.error("Field" + field_name + "not Found for class " + a.getName());
+           LoggerHelper.error("Field " + field_name + " not Found for class " + a.getClass().getName());
            return default_field_name;
         }
         
     }
+
 }
