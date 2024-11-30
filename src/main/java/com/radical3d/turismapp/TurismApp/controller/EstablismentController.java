@@ -68,15 +68,19 @@ public class EstablismentController {
 
     @PostMapping(path = "/direction")
     public ResponseEntity<Direction> createEstablishmentDirection(
-        @RequestBody Direction direction,
-        @RequestParam(required = true) int establishment){
-        return ResponseEntity.ok().body(directionService.createEstablishmentDirection(direction, establishment));
+        @RequestBody Direction direction){
+        directionRequestHaveID(direction);
+        return ResponseEntity.ok().body(directionService.createEstablishmentDirection(direction));
     }
 
     @PutMapping(path = "/direction")
     public ResponseEntity<Direction> updateEstablishmentDirection(
-        @RequestBody Direction direction,
-        @RequestParam(required = true) int establishment){
-        return ResponseEntity.ok().body(directionService.updateEstablishmentDirection(direction, establishment));
+        @RequestBody Direction direction){
+        directionRequestHaveID(direction);
+        return ResponseEntity.ok().body(directionService.updateEstablishmentDirection(direction));
+    }
+
+    private void directionRequestHaveID(Direction direction){
+        if (direction.getId() <= 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide a valid ID for the direction");
     }
 }

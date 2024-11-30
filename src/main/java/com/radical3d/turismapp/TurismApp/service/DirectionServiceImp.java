@@ -31,13 +31,16 @@ public class DirectionServiceImp implements IDirectionService {
     private SecurityUtils securityUtils;
 
     @Override
-    public Direction createEstablishmentDirection(Direction direction, int establishmentID) {
+    public Direction createEstablishmentDirection(Direction direction) {
         City city = getUserCity();
         Establishment establishment = establishmentRepository
-                .findById(establishmentID)
+                .findById(direction.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Establishment not found"));
         if (city.getId() != establishment.getCity().getId())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Current user cannot modify the record");
+        if (establishment.getDirection() != null)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Establishment already have a direction");
+        direction.setId(0); //Clean for auto-assignment
         direction.setCity(city);
         direction.setEstablishment(establishment);
 
@@ -53,15 +56,16 @@ public class DirectionServiceImp implements IDirectionService {
     }
 
     @Override
-    public Direction updateEstablishmentDirection(Direction direction, int establishmentID) {
+    public Direction updateEstablishmentDirection(Direction direction) {
         City city = getUserCity();
         Establishment establishment = establishmentRepository
-                .findById(establishmentID)
+                .findById(direction.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Establishment not found"));
         if (city.getId() != establishment.getCity().getId())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Current user cannot modify the record");
         Direction p_direction = establishment.getDirection();
         if (p_direction == null) {
+            direction.setId(0); //Clean for auto assign
             direction.setCity(city);
             direction.setEstablishment(establishment);
 

@@ -28,7 +28,7 @@ public class Direction {
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = true, updatable = true)
     @MapsId()
     @JsonIgnore
     private Establishment establishment;
